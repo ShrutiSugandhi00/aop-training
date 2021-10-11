@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.4.xsd">
+
+  <module name="project" package="com.axelor.project.db" />
+
+  <entity name="Timesheet">
+
+    <integer name="hrs" title="hrs" />
+    <string name="company" title="Company" />
+    <integer name="getTotalHrs" title="Hours" />
+    <string name="username" title="User" />
+    <date name="fromdate" title="From Date" />
+    <date name="todate" title="To Date" />
+    <one-to-many ref="com.axelor.project.db.TimesheetLines" name="timesheetLineList" title="TimesheetLine" mappedBy="timesheet"/>
+
+
+  </entity>
+
+</domain-models>

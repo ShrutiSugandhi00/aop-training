@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.4.xsd">
+
+  <module name="project" package="com.axelor.project.db" />
+
+  <entity name="TimesheetLines">
+    <string name="project" title="project" />
+    <string name="task" title="task" />
+    <date name="dates" title="date" />
+    <string name="activity" title="activity" />
+    <integer name="hours" title="hours" />
+    <string name="comments" title="comments" />
+    <many-to-one ref="com.axelor.project.db.Timesheet" name="timesheet"/>
+
+  </entity>
+</domain-models>
