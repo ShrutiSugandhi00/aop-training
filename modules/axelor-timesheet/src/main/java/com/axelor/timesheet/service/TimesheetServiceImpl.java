@@ -12,7 +12,7 @@ public class TimesheetServiceImpl implements TimesheetService {
     BigDecimal totalhrs = BigDecimal.ZERO;
     if (timesheet.getTimesheetLineList() != null) {
       for (TimesheetLines l : timesheet.getTimesheetLineList()) {
-        totalhrs = l.getHours();
+        totalhrs = totalhrs.add(l.getHours());
       }
     }
     timesheet.setTotalHrs(totalhrs);

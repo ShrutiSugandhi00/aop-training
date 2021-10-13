@@ -12,8 +12,7 @@
 		<field name="todate" />
 	</grid>
 
-	<form model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-form" onNew="action.timesheet.record.on.new,action-timesheet-method-from-date"
-		width="large">
+	<form model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-form" onNew="action.timesheet.record.on.new,action-timesheet-method-from-date" width="large">
 		<menubar>
 			<menu title="Reports">
 				<item action="action" title="Print" />
@@ -24,21 +23,48 @@
 		</menubar>
 		<panel name="panel-1">
 			<field name="progress" widget="NavSelect" selection="timesheet.progress" readonly="true" showTitle="false" />
-			<button onClick="save" name="confirm" title="confirm" colSpan="2" />
-			<field name="hrs" />
+			<button onClick="save,action.timesheet.record.on.confirm" name="confirm" title="confirm" colSpan="2" showIf="progress == 0" />
+			<button onClick="save,action.timesheet.record.on.continue" name="continue" title="continue" colSpan="2" showIf="progress == 1" />
+			<button onClick="save,action.timesheet.record.on.validate" name="validate" title="validate" colSpan="2" showIf="progress == 2" />
+			<button onClick="save,action.timesheet.record.on.refuse" name="refuse" title="refuse" colSpan="2" showIf="progress == 3" />
+			<button onClick="save" name="draft" title="draft" colSpan="2" showIf="progress == 4" />
+
+
 			<field name="company" readonly="true" />
 			<field name="username" />
 			<field name="fromdate" />
 			<field name="todate" />
-			<field name="getTotalHrs" title="TotalHours" />
 		</panel>
-		<panel-related field="timesheetLineList" grid-view="TimesheetLines-grid" form-view="timesheet-line-form" title="Timesheet Line" onChange="action-timesheet-method-test-btn-on-click" />
+		<panel name="panel-2">
+			<panel-related field="timesheetLineList" grid-view="TimesheetLines-grid" form-view="timesheet-line-form" title="Timesheet Line" onChange="action-timesheet-method-test-btn-on-click"
+				colSpan="12" />
+
+		</panel>
+		<panel name="panel-3" title="Totals on period">
+			<field name="getTotalHrs" title="TotalHours" />
+			<field name="hrs" />
+		</panel>
+
 
 	</form>
+
 
 	<action-method name="action-timesheet-method-test-btn-on-click">
 		<call class="com.axelor.timesheet.web.TimesheetController" method="test" />
 	</action-method>
+	<action-record name="action.timesheet.record.on.confirm" model="com.axelor.project.db.Timesheet">
+		<field name="progress" expr="1" />
+	</action-record>
+	
+	<action-record name="action.timesheet.record.on.continue" model="com.axelor.project.db.Timesheet">
+		<field name="progress" expr="2" />
+	</action-record>
+	<action-record name="action.timesheet.record.on.validate" model="com.axelor.project.db.Timesheet">
+		<field name="progress" expr="3" />
+	</action-record>
+	<action-record name="action.timesheet.record.on.refuse" model="com.axelor.project.db.Timesheet">
+		<field name="progress" expr="4" />
+	</action-record>
 
 
 	<!-- <action-method name="action-timesheet-method-date"> -->
