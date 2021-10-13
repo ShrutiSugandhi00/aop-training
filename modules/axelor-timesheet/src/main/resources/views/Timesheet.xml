@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 
 
-  <grid model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-grid">
-    <field name="hrs" />
-    <field name="company" />
-    <field name="username" />
-    <field name="getTotalHrs" />
-    <field name="fromdate" />
-    <field name="todate" />
-  </grid>
+	<grid model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-grid">
+		<field name="hrs" />
+		<field name="company" />
+		<field name="username" />
+		<field name="getTotalHrs" />
+		<field name="fromdate" />
+		<field name="todate" />
+	</grid>
 
-  <form model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-form" onNew="action-timesheet-method-date" width="large">
-    <menubar>
-      <menu title="Reports">
-        <item action="action" title="Print" />
-      </menu>
-      <menu title="Tools">
-        <item action="action" title="line generation wizards" />
-      </menu>
-    </menubar>
-    <panel name="panel-1">
-      <field name="progress" widget="NavSelect" selection="timesheet.progress" />
-    <button onClick="save" name="confirm" title="confirm" colSpan="2"/>
-      <field name="hrs" />
-      <field name="company" readonly="true"/>
-      <field name="username" />
-      <field name="fromdate" />
-      <field name="todate" />
-      <field name="getTotalHrs" title="TotalHours" />
-    </panel>
-    <panel-related field="timesheetLineList" grid-view="TimesheetLines-grid" form-view="timesheet-line-form" title="Timesheet Line" onChange="action-timesheet-method-test-btn-on-click" />
+	<form model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-form" onNew="action.timesheet.record.on.new,action-timesheet-method-from-date"
+		width="large">
+		<menubar>
+			<menu title="Reports">
+				<item action="action" title="Print" />
+			</menu>
+			<menu title="Tools">
+				<item action="action" title="line generation wizards" />
+			</menu>
+		</menubar>
+		<panel name="panel-1">
+			<field name="progress" widget="NavSelect" selection="timesheet.progress" readonly="true" showTitle="false" />
+			<button onClick="save" name="confirm" title="confirm" colSpan="2" />
+			<field name="hrs" />
+			<field name="company" readonly="true" />
+			<field name="username" />
+			<field name="fromdate" />
+			<field name="todate" />
+			<field name="getTotalHrs" title="TotalHours" />
+		</panel>
+		<panel-related field="timesheetLineList" grid-view="TimesheetLines-grid" form-view="timesheet-line-form" title="Timesheet Line" onChange="action-timesheet-method-test-btn-on-click" />
 
-  </form>
+	</form>
 
-  <action-method name="action-timesheet-method-test-btn-on-click">
-    <call class="com.axelor.timesheet.web.TimesheetController" method="test" />
-  </action-method>
-  <action-method name="action-timesheet-method-date">
-    <call class="com.axelor.timesheet.web.TimesheetController" method="date" />
+	<action-method name="action-timesheet-method-test-btn-on-click">
+		<call class="com.axelor.timesheet.web.TimesheetController" method="test" />
+	</action-method>
 
-  </action-method>
 
+	<!-- <action-method name="action-timesheet-method-date"> -->
+	<!-- <call class="com.axelor.timesheet.web.TimesheetController" method="date" /> -->
+	<!-- </action-method> -->
+
+	<action-record name="action.timesheet.record.on.new" model="com.axelor.project.db.Timesheet">
+		<field name="progress" expr="0" />
+
+	</action-record>
+	<action-method name="action-timesheet-method-from-date">
+		<call class="com.axelor.timesheet.web.TimesheetController" method="fromDate" />
+	</action-method>
 
 
 </object-views>

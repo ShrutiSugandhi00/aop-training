@@ -8,7 +8,7 @@ public class TimesheetServiceImpl implements TimesheetService {
 
   @Override
   public Timesheet computetotalHrs(Timesheet timesheet) {
-    System.err.println("computetotalHrs.........");
+   // System.err.println("computetotalHrs.........");
     BigDecimal totalhrs = BigDecimal.ZERO;
     if (timesheet.getTimesheetLineList() != null) {
       for (TimesheetLines l : timesheet.getTimesheetLineList()) {
@@ -21,9 +21,8 @@ public class TimesheetServiceImpl implements TimesheetService {
 
   @Override
   public Timesheet fromDate(Timesheet timesheet) {
-    System.err.println("updating date");
-
-    timesheet.setFromdate(java.time.LocalDate.now());
-    return timesheet;
-  }
+   System.err.println("updating date");
+   //timesheet.setFromdate(java.time.LocalDate.now());
+   return timesheet;
+}
 }
