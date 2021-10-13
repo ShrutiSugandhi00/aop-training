@@ -12,7 +12,7 @@
     <field name="todate" />
   </grid>
 
-  <form model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-form">
+  <form model="com.axelor.project.db.Timesheet" title="Timesheet" name="timesheet-form" onNew="action-timesheet-method-date" width="large">
     <menubar>
       <menu title="Reports">
         <item action="action" title="Print" />
@@ -21,27 +21,26 @@
         <item action="action" title="line generation wizards" />
       </menu>
     </menubar>
-    <panel name="panel-1" colSpan="12">
-      <field name="progress" widget="NavSelect" selection="timesheet.progress" colSpan="8"></field>
-
+    <panel name="panel-1">
+      <field name="progress" widget="NavSelect" selection="timesheet.progress" />
+    <button onClick="save" name="confirm" title="confirm" colSpan="2"/>
       <field name="hrs" />
-      <field name="company" />
+      <field name="company" readonly="true"/>
       <field name="username" />
       <field name="fromdate" />
       <field name="todate" />
-
-    </panel>
-    <panel-related field="timesheetLineList" grid-view="TimesheetLines-grid" form-view="timesheet-line-form" title="Timesheet Line" onChange="action-timesheet-method-test-btn-on-click"/>
-    <panel name="actionPanel" sidebar="true">
       <field name="getTotalHrs" title="TotalHours" />
-      <button onClick="action-timesheet-method-test-btn-on-click" name="testBtn" title="test" />
-      <button onClick="" name="confirm" title="confirm"  />
-
     </panel>
+    <panel-related field="timesheetLineList" grid-view="TimesheetLines-grid" form-view="timesheet-line-form" title="Timesheet Line" onChange="action-timesheet-method-test-btn-on-click" />
+
   </form>
 
   <action-method name="action-timesheet-method-test-btn-on-click">
     <call class="com.axelor.timesheet.web.TimesheetController" method="test" />
+  </action-method>
+  <action-method name="action-timesheet-method-date">
+    <call class="com.axelor.timesheet.web.TimesheetController" method="date" />
+
   </action-method>
 
 

@@ -3,10 +3,18 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 
+
   <menuitem title="Timesheets" name="timesheet-root" action="action.timesheet" />
   <action-view name="action.timesheet" title="Timesheet"
     model="com.axelor.project.db.Timesheet">
     <view type="grid" name="timesheet-grid" />
     <view type="form" name="timesheet-form" />
   </action-view>
+
+  <menuitem title="Projects" name="project-root" action="action.project.view.project"/>
+  <action-view name="action.project.view.project" title="Project" model="com.axelor.project.db.Project">
+  <view type="grid" name="Project-grid" />
+    <view type="form" name="Project-form" />
+  </action-view>
+
 </object-views>

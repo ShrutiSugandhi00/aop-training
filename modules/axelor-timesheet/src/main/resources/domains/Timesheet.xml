@@ -6,13 +6,15 @@
 
   <entity name="Timesheet">
 
-    <integer name="hrs" title="hrs" />
-    <string name="company" title="Company" />
-    <integer name="getTotalHrs" title="Hours" />
+
+    <decimal name="hrs" title="hrs" />
+    <string name="company" title="Company" default="Axelor India"/>
+    <decimal name="totalHrs" title="Hours" />
     <string name="username" title="User" />
     <date name="fromdate" title="From Date" />
     <date name="todate" title="To Date" />
-    <one-to-many ref="com.axelor.project.db.TimesheetLines" name="timesheetLineList" title="TimesheetLine" mappedBy="timesheet"/>
+    <one-to-many ref="com.axelor.project.db.TimesheetLines" name="timesheetLineList" title="TimesheetLine" mappedBy="timesheet" />
+    <many-to-one ref="com.axelor.project.db.Project" name="projects" />
 
 
   </entity>
