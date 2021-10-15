@@ -6,7 +6,7 @@
     <field name="project" />
     <field name="task" />
     <field name="dates" />
-   <field name="activity"  selection="timesheet.timesheetlines.task.select"/> 
+   <field name="activity"  selection="timesheet.timesheetlines.task.select"/>
     <field name="hours" />
     <field name="comments" />
   </grid>

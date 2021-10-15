@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+
+  <grid model="com.axelor.project.db.Activity" title="Activity" name="activity-grid">
+
+    <field name="name" />
+  </grid>
+
+  <form model="com.axelor.project.db.Activity" title="Activity" name="activity-form">
+    <panel>
+      <field name="name" />
+      <field name="priority" />
+    </panel>
+
+  </form>
+
+  <tree name="activity-task-tree" title="activity">
+    <column name="Task" type="string" />
+    <column name="status" type="integer" />
+    <node model="com.axelor.project.db.Timesheet">
+      <field name="name" as="Task" />
+    </node>
+    <node model="com.axelor.project.db.Activity" parent="timesheet" draggable="true" onClick="action.project.record.activity">
+      <field name="name" as="Task" />
+      <field name="priority" as="status" />
+    </node>
+
+  </tree>
+
+  <action-view name="action.project.record.activity" title="Activity" model="com.axelor.project.db.Activity">
+    <view type="form" name="activity-form" />
+  </action-view>
+</object-views>

@@ -4,17 +4,20 @@
 
   <module name="project" package="com.axelor.project.db" />
 
-  <entity name="Timesheet">
+  <entity name="Timesheet" repository="abstract">
 
 
     <decimal name="hrs" title="hrs" />
-    <string name="company" title="Company" default="Axelor India"/>
+    <string name="company" title="Company" default="Axelor India" />
     <decimal name="totalHrs" title="Hours" />
-    <string name="username" title="User" />
+    <many-to-one name="user" column="user_id" ref="com.axelor.auth.db.User" title="User" />
     <date name="fromdate" title="From Date" />
     <date name="todate" title="To Date" />
     <one-to-many ref="com.axelor.project.db.TimesheetLines" name="timesheetLineList" title="TimesheetLine" mappedBy="timesheet" />
     <many-to-one ref="com.axelor.project.db.Project" name="projects" />
+    <one-to-many ref="com.axelor.project.db.Activity" name="activityList" title="Activity" mappedBy="timesheet" />
+    <many-to-one ref="com.axelor.meta.db.MetaFile" name="image" title="Profile" />
+
 
 
   </entity>
