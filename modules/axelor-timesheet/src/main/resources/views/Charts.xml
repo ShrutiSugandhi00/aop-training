@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+
+
+	<chart name="chart.project.timesheet" title="Timesheet Bar">
+		<dataset type="jpql">
+<![CDATA[
+SELECT
+SUM(t.totalHrs) AS hrs ,
+MONTH(t.fromdate)  AS month
+FROM
+Timesheet t LEFT JOIN  t.timesheetLineList tl ON tl.dates < t.fromdate
+    WHERE
+        YEAR(t.fromdate) = YEAR(current_date)
+    GROUP BY
+        MONTH(t.fromdate)
+    ORDER BY
+        month
+
+]]>
+</dataset>
+
+		<category key="month" type="month" />
+
+		<series key="hours" groupBy="month" type="bar" />
+
+	</chart>
+
+	<dashboard name="Charts.dashboard" title="Chart View!!">
+		<dashlet action="chart:chart.project.timesheet" />
+		<!-- <dashlet action="action.timesheet" colSpan="8" /> -->
+	</dashboard>
+
+	<action-view name="action.timesheet.view.chart" title="Chart View!">
+		<view type="dashboard" name="Charts.dashboard" />
+	</action-view>
+
+	<menuitem title="Dashboard" name="menu-dashboard" action="action.timesheet.view.chart" />
+
+
+</object-views>

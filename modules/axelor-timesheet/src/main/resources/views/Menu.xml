@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 
 
-  <menuitem title="Timesheets" name="timesheet-root" action="action.timesheet" />
-  <action-view name="action.timesheet" title="Timesheet" model="com.axelor.project.db.Timesheet">
-    <view type="grid" name="timesheet-grid" />
-    <view type="form" name="timesheet-form" />
-    <view type="cards" name="timesheet-card" />
-    <view type="tree" name="timesheet-task-tree" />
+	<menuitem title="Timesheets" name="timesheet-root" />
+	<menuitem title="Timesheets" name="timesheet-root-view-child" parent="timesheet-root" action="action.timesheet" />
+	<action-view name="action.timesheet" title="Timesheet" model="com.axelor.project.db.Timesheet">
+		<view type="grid" name="timesheet-grid" />
+		<view type="form" name="timesheet-form" />
+		<view type="cards" name="timesheet-card" />
+		<view-param name="popup" value="reload" />
+		
+	</action-view>
+	
 
-  </action-view>
 
-  <menuitem title="Projects" name="project-root" action="action.project.view.project" />
-  <action-view name="action.project.view.project" title="Project" model="com.axelor.project.db.Project">
-    <view type="grid" name="Project-grid" />
-    <view type="form" name="Project-form" />
-  </action-view>
-  <menuitem title="Activity" name="acticity-root" action="action.project.view.activity" />
-  <action-view name="action.project.view.activity" title="Activities">
-    <view type="tree" name="activity-task-tree" />
-  </action-view>
+	<menuitem title="Timesheet-Tree" name="timesheet-root-tree-child" parent="timesheet-root" action="action.timesheet.tree" />
+	<action-view name="action.timesheet.tree" title="Timesheet Tree">
+		<view type="tree" name="timesheet-task-tree" />
+	</action-view>
+
+	<menuitem title="Projects" name="project-root" action="action.project.view.project" />
+	<action-view name="action.project.view.project" title="Project" model="com.axelor.project.db.Project">
+		<view type="grid" name="Project-grid" />
+		<view type="form" name="Project-form" />
+	</action-view>
+
+	<menuitem title="Activity" name="acticity-root" action="action.project.view.activity" />
+	<action-view name="action.project.view.activity" title="Activities">
+		<view type="tree" name="activity-task-tree" />
+	</action-view>
 </object-views>
