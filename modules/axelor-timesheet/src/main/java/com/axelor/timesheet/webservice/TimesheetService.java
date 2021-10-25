@@ -16,26 +16,25 @@ import javax.ws.rs.core.MediaType;
 @Path("/timesheet")
 public class TimesheetService {
 
-	@Inject
-	AbstractTimesheetRepository timerepo;
-	JsonNodeFactory jsonf = JsonNodeFactory.instance;
+  @Inject AbstractTimesheetRepository timerepo;
+  JsonNodeFactory jsonf = JsonNodeFactory.instance;
 
-	@Path("/all")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public JsonNode getTimesheet() {
-		ObjectNode mainnode = jsonf.objectNode();
+  @Path("/all")
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public JsonNode getTimesheet() {
+    ObjectNode mainnode = jsonf.objectNode();
 
-		List<Timesheet> timesheetlist = timerepo.all().fetch();
-		ArrayNode arraynode = jsonf.arrayNode();
-		for (Timesheet t : timesheetlist) {
-			ObjectNode timesheetnode = jsonf.objectNode();
-			timesheetnode.put("company", t.getCompany());
-			timesheetnode.putPOJO("field", t);
-		}
-		mainnode.put("status", 0);
-		mainnode.set("data", arraynode);
+    List<Timesheet> timesheetlist = timerepo.all().fetch();
+    ArrayNode arraynode = jsonf.arrayNode();
+    for (Timesheet t : timesheetlist) {
+      ObjectNode timesheetnode = jsonf.objectNode();
+      timesheetnode.put("company", t.getCompany());
+      timesheetnode.putPOJO("field", t);
+    }
+    mainnode.put("status", 0);
+    mainnode.set("data", arraynode);
 
-		return mainnode;
-	}
+    return mainnode;
+  }
 }

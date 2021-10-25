@@ -1,116 +1,98 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 
 
-	<grid model="com.axelor.project.db.Timesheet" title="Timesheet"
-		name="timesheet-grid" onNew="action.timesheet.view.test,action-timesheet-method-from-date">
+  <grid model="com.axelor.project.db.Timesheet" title="Timesheet"
+    name="timesheet-grid" onNew="action.timesheet.view.test">
 
-		<button onClick="action-timesheet-method-add " name="add"
-			title="add" />
-		<field name="hrs" />
-		<field name="company" />
-		<field name="username" />
-		<field name="totalHrs" />
-		<field name="fromdate" />
-		<field name="todate" />
+    <button onClick="action-timesheet-method-add " name="add"
+      title="add" />
+    <field name="hrs" />
+    <field name="company" />
+    <field name="username" />
+    <field name="totalHrs" />
+    <field name="fromdate" />
+    <field name="todate" />
 
-	</grid>
+  </grid>
 
-	<form model="com.axelor.project.db.Timesheet" title="Timesheet"
-		name="timesheet-form"
-		onNew="action.timesheet.record.on.new,action-timesheet-method-from-date"
-		width="large">
+  <form model="com.axelor.project.db.Timesheet" title="Timesheet"
+    name="timesheet-form"
+    onNew="action.timesheet.record.on.new,action-timesheet-method-from-date"
+    width="large">
 
-		<menubar>
-			<menu title="Reports">
-				<item action="action" title="Print" />
-			</menu>
-			<menu title="Tools">
-				<item action="action" title="line generation wizards" />
-			</menu>
-		</menubar>
+    <menubar>
+      <menu title="Reports">
+        <item action="action" title="Print" />
+      </menu>
+      <menu title="Tools">
+        <item action="action" title="line generation wizards" />
+      </menu>
+    </menubar>
 
-		<panel name="panel-1">
-			<field name="progress" widget="NavSelect" selection="timesheet.progress"
-				readonly="true" showTitle="false" />
-			<button onClick="save,action.timesheet.record.on.confirm"
-				name="confirm" title="confirm" colSpan="2" showIf="progress == 0" />
-			<button onClick="save,action.timesheet.record.on.continue"
-				name="continue" title="continue" colSpan="2" showIf="progress == 1" />
-			<button onClick="save,action.timesheet.record.on.validate"
-				name="validate" title="validate" colSpan="2" showIf="progress == 2" />
-			<button onClick="save,action.timesheet.record.on.refuse" name="refuse"
-				title="refuse" colSpan="2" showIf="progress == 3" />
-			<button onClick="save" name="draft" title="draft" colSpan="2"
-				showIf="progress == 4" />
-			<button onClick="save,action-timesheet-method-add" name="test"
-				title="test" colSpan="2" />
-			<field name="company" readonly="true" />
-			<field name="user" />
-			<field name="fromdate" />
-			<field name="todate" />
-		</panel>
+    <panel name="panel-1">
+      <field name="progress" widget="NavSelect" selection="timesheet.progress"
+        readonly="true" showTitle="false" />
+      <button onClick="save,action.timesheet.record.on.confirm"
+        name="confirm" title="confirm" colSpan="2" showIf="progress == 0" />
 
-		<panel>
-			<field name="image" widget="image" />
-		</panel>
+      <field name="company" readonly="true" />
+      <field name="user" />
+      <field name="fromdate" />
+      <field name="todate" onChange="action-timesheet-condition-check-to-date" />
+    </panel>
 
-		<panel name="panel-2">
-			<panel-related field="timesheetLineList" grid-view="TimesheetLines-grid"
-				form-view="timesheet-line-form" title="Timesheet Line"
-				onChange="action-timesheet-method-test-btn-on-click" colSpan="12" />
-			<panel-related field="activityList" />
-		</panel>
+    <panel>
+      <field name="image" widget="image" />
+    </panel>
 
-		<panel name="panel-3" title="Totals on period">
-			<field name="totalHrs" title="TotalHours" />
-			<field name="hrs" />
-		</panel>
+    <panel name="panel-2">
+      <panel-related field="timesheetLineList" grid-view="TimesheetLines-grid"
+        form-view="timesheet-line-form" title="Timesheet Line" 	colSpan="12" />
+<!-- 				onChange="com.axelor.timesheet.service.TimesheetService:computetotalHrs" -->
 
-	</form>
+      <panel-related field="activityList" />
+    </panel>
 
-	<tree name="timesheet-task-tree" title="TREE">
-		<column name="Task" type="string" />
-		<column name="status" type="decimal" />
-		<node model="com.axelor.project.db.Timesheet">
-			<field name="name" as="Task" />
-		</node>
-		<node model="com.axelor.project.db.TimesheetLines" parent="timesheet"
-			draggable="true" onClick="action.project.record.activity">
-			<field name="task" as="Task" />
-			<field name="hours" as="status" />
-		</node>
+    <panel name="panel-3" title="Totals on period">
+      <button
+        onClick="save,com.axelor.timesheet.service.TimesheetService:demo(__this__),sync"
+        name="demo-btn" title="Demo" />
+      <field name="totalHrs" title="TotalHours" />
+      <field name="hrs" />
+    </panel>
 
-	</tree>
+  </form>
 
-	<!-- <action-view name="action.timesheet.view.test" title="Test" -->
-	<!-- model="com.axelor.project.db.Timesheet"> -->
-	<!-- <view type="grid" name="timesheet-grid" /> -->
-	<!-- <view-param name="limit" value="7" /> -->
-	<!-- <view type="form" name="timesheet-form" /> -->
-	<!-- <view-param name="show-confirm" value="false" /> -->
-	<!-- <view-param name="show-toolbar" value="false" /> -->
-	<!-- <view-param name="popup.maximized" value="true" /> -->
-	<!-- <view-param name="popup-save" value="false" /> -->
-	<!-- <view-param name="popup" value="true" /> -->
-	<!-- </action-view> -->
+  <tree name="timesheet-task-tree" title="TREE">
+    <column name="Task" type="string" />
+    <column name="status" type="decimal" />
+    <node model="com.axelor.project.db.Timesheet">
+      <field name="name" as="Task" />
+    </node>
+    <node model="com.axelor.project.db.TimesheetLines" parent="timesheet"
+      draggable="true" onClick="action.project.record.activity">
+      <field name="task" as="Task" />
+      <field name="hours" as="status" />
+    </node>
 
+  </tree>
 
-	<action-view name="action.project.record.activity" title="Activity"
-		model="com.axelor.project.db.TimesheeLines">
-		<view type="form" name="timesheet-line-form" />
-	</action-view>
+  <action-view name="action.project.record.activity" title="Activity"
+    model="com.axelor.project.db.TimesheeLines">
+    <view type="form" name="timesheet-line-form" />
+  </action-view>
 
-	<cards name="timesheet-card" model="com.axelor.project.db.Timesheet"
-		title="Timesheet">
+  <cards name="timesheet-card" model="com.axelor.project.db.Timesheet"
+    title="Timesheet">
 
-		<field name="company" />
-		<field name="user" />
-		<field name="image" />
-		<field name="activityList" />
-		<template>
+    <field name="company" />
+    <field name="user" />
+    <field name="image" />
+    <field name="activityList" />
+    <template>
     <![CDATA[
     <div class="span12 card-image">
        <img ng-src="{{$image(null, 'image')}}">
@@ -120,46 +102,85 @@
 
     ]]>
     </template>
+  </cards>
 
 
-	</cards>
-	<action-method name="action-timesheet-method-test-btn-on-click">
-		<call class="com.axelor.timesheet.web.TimesheetController"
-			method="test" />
-	</action-method>
-	<action-record name="action.timesheet.record.on.confirm"
-		model="com.axelor.project.db.Timesheet">
-		<field name="progress" expr="1" />
-	</action-record>
-
-	<action-record name="action.timesheet.record.on.continue"
-		model="com.axelor.project.db.Timesheet">
-		<field name="progress" expr="2" />
-	</action-record>
-	<action-record name="action.timesheet.record.on.validate"
-		model="com.axelor.project.db.Timesheet">
-		<field name="progress" expr="3" />
-	</action-record>
-	<action-record name="action.timesheet.record.on.refuse"
-		model="com.axelor.project.db.Timesheet">
-		<field name="progress" expr="4" />
-	</action-record>
+  <!-- <action-method name="action-timesheet-method-test-btn-on-click"> -->
+  <!-- <call class="com.axelor.timesheet.web.TimesheetController" -->
+  <!-- method="test" /> -->
+  <!-- </action-method> -->
 
 
-	<action-method name="action-timesheet-method-add" model="com.axelor.project.db.Timesheet">
-		<call class="com.axelor.timesheet.web.TimesheetController"
-			method="add" />
-	</action-method>
+  <action-method name="action-timesheet-method-add" model="com.axelor.project.db.Timesheet">
+    <call class="com.axelor.timesheet.web.TimesheetController"
+      method="add" />
+  </action-method>
 
-	<action-record name="action.timesheet.record.on.new"
-		model="com.axelor.project.db.Timesheet">
-		<field name="progress" expr="0" />
-	</action-record>
+  <action-record name="action.timesheet.record.on.new"
+    model="com.axelor.project.db.Timesheet">
+    <field name="progress" expr="0" />
+  </action-record>
 
+  <action-method name="action-timesheet-method-from-date"
+    model="com.axelor.project.db.Timesheet">
+    <call class="com.axelor.timesheet.web.TimesheetController"
+      method="fromDate" />
+  </action-method>
 
-	<action-method name="action-timesheet-method-from-date"	model="com.axelor.project.db.Timesheet">
-		<call class="com.axelor.timesheet.web.TimesheetController"
-			method="fromDate" />
-	</action-method>
+  <action-condition name="action-timesheet-condition-check-to-date"
+    model="com.axelor.project.db.Timesheet">
+
+    <check field="todate" />
+    <check field="todate" if="fromdate &gt; todate"
+      error="todate creation date is in the future." />
+
+  </action-condition>
+
+  <!-- <action-view name="action.timesheet.view.test" title="Test" -->
+  <!-- model="com.axelor.project.db.Timesheet"> -->
+  <!-- <view type="grid" name="timesheet-grid" /> -->
+  <!-- <view-param name="limit" value="7" /> -->
+  <!-- <view type="form" name="timesheet-form" /> -->
+  <!-- <view-param name="show-confirm" value="false" /> -->
+  <!-- <view-param name="show-toolbar" value="false" /> -->
+  <!-- <view-param name="popup.maximized" value="true" /> -->
+  <!-- <view-param name="popup-save" value="false" /> -->
+  <!-- <view-param name="popup" value="true" /> -->
+  <!-- </action-view> -->
+
+  <!-- <action-record name="action.timesheet.record.on.confirm" -->
+  <!-- model="com.axelor.project.db.Timesheet"> -->
+  <!-- <field name="progress" expr="1" /> -->
+  <!-- </action-record> -->
+
+  <!-- <action-record name="action.timesheet.record.on.continue" -->
+  <!-- model="com.axelor.project.db.Timesheet"> -->
+  <!-- <field name="progress" expr="2" /> -->
+  <!-- </action-record> -->
+  <!-- <action-record name="action.timesheet.record.on.validate" -->
+  <!-- model="com.axelor.project.db.Timesheet"> -->
+  <!-- <field name="progress" expr="3" /> -->
+  <!-- </action-record> -->
+  <!-- <action-record name="action.timesheet.record.on.refuse" -->
+  <!-- model="com.axelor.project.db.Timesheet"> -->
+  <!-- <field name="progress" expr="4" /> -->
+  <!-- </action-record> -->
 
 </object-views>
+
+<!-- <button onClick="save,action.timesheet.record.on.continue" -->
+<!-- name="continue" title="continue" colSpan="2" showIf="progress == 1"
+  /> -->
+<!-- <button onClick="save,action.timesheet.record.on.validate" -->
+<!-- name="validate" title="validate" colSpan="2" showIf="progress == 2"
+  /> -->
+<!-- <button onClick="save,action.timesheet.record.on.refuse" name="refuse" -->
+<!-- title="refuse" colSpan="2" showIf="progress == 3" /> -->
+<!-- <button onClick="save" name="draft" title="draft" colSpan="2" -->
+<!-- showIf="progress == 4" /> -->
+
+
+      <!-- <button onClick="save,action-timesheet-method-add" name="test" -->
+      <!-- title="test" colSpan="2" /> -->
+      <!-- <button onClick="com.axelor.timesheet.service.TimesheetService:computetotalHrs"
+        colSpan="2" name="sample-btn" title="Sample"/> -->

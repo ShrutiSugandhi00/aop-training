@@ -1,43 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<object-views xmlns="http://axelor.com/xml/ns/object-views"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 
 
 	<chart name="chart.project.timesheet" title="Timesheet Bar">
+		<search-fields>
+			<field name="fdate" title="FROM DATE" type="date" />
+			<field name="tdate" title="TO DATE" type="date" />
+		</search-fields>
 		<dataset type="jpql">
-<![CDATA[
-SELECT
-SUM(t.totalHrs) AS hrs ,
-MONTH(t.fromdate)  AS month
-FROM
-Timesheet t LEFT JOIN  t.timesheetLineList tl ON tl.dates < t.fromdate
-    WHERE
-        YEAR(t.fromdate) = YEAR(current_date)
-    GROUP BY
-        MONTH(t.fromdate)
-    ORDER BY
-        month
-
-]]>
-</dataset>
-
-		<category key="month" type="month" />
-
-		<series key="hours" groupBy="month" type="bar" />
-
+			<![CDATA[
+			SELECT
+			    MONTH(t.todate)AS month,
+			    COUNT(tl.timesheet) AS lines
+			FROM
+			    Timesheet t 
+			LEFT JOIN
+				TimesheetLines tl ON t.id=tl.timesheet
+			WHERE
+			   	t.fromdate=:fdate AND t.todate=:tdate
+			GROUP BY
+				t.todate
+			]]>
+		</dataset>
+		<category key="month" type="month" title="x-axis" />
+		<series key="lines" groupBy="lines" type="bar" title="y-axis" />
 	</chart>
 
-	<dashboard name="Charts.dashboard" title="Chart View!!">
+	<chart name="chart.project.timesheet.sql" title="Timesheet Sql Bar">
+		<search-fields>
+			<field name="fdate" title="FROM DATE" type="date" />
+			<field name="tdate" title="TO DATE" type="date" />
+		</search-fields>
+		<dataset type="sql">
+			<![CDATA[
+			SELECT
+			 	EXTRACT(month from t.todate)AS month,
+			 	COUNT(tl.id) AS lines
+			FROM
+			    project_timesheet t 
+			LEFT JOIN
+				project_timesheet_lines tl ON t.id=tl.timesheet
+			WHERE
+			   	t.fromdate= DATE(:fdate) AND t.todate =DATE(:tdate)
+			GROUP BY
+				 t.todate
+			]]>
+		</dataset>
+		<category key="month" type="month" title="x-axis" />
+		<series key="lines" groupBy="lines" type="bar" title="y-axis" />
+	</chart>
+
+	<dashboard name="Charts.sql.dashboard" title="Sql chart view">
+		<dashlet action="chart:chart.project.timesheet.sql" />
 		<dashlet action="chart:chart.project.timesheet" />
-		<!-- <dashlet action="action.timesheet" colSpan="8" /> -->
 	</dashboard>
 
-	<action-view name="action.timesheet.view.chart" title="Chart View!">
-		<view type="dashboard" name="Charts.dashboard" />
-	</action-view>
 
-	<menuitem title="Dashboard" name="menu-dashboard" action="action.timesheet.view.chart" />
 
 
 </object-views>
+
+
+
+
+
+
+
+
+
+
