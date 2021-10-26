@@ -6,15 +6,17 @@
 
   <grid model="com.axelor.project.db.Timesheet" title="Timesheet"
     name="timesheet-grid" onNew="action.timesheet.view.test">
-
-    <button onClick="action-timesheet-method-add " name="add"
-      title="add" />
-    <field name="hrs" />
-    <field name="company" />
-    <field name="username" />
-    <field name="totalHrs" />
-    <field name="fromdate" />
-    <field name="todate" />
+    <toolbar><button onClick="com.axelor.timesheet.web.TimesheetController:sample" name="filter-btn" title="Filter" /></toolbar>
+		
+		    
+		    <button onClick="action-timesheet-method-add " name="add"
+		      title="add" />
+		    <field name="hrs" />
+		    <field name="company" />
+		    <field name="username" />
+		    <field name="totalHrs" />
+		    <field name="fromdate" />
+		    <field name="todate" />
 
   </grid>
 
@@ -23,86 +25,94 @@
     onNew="action.timesheet.record.on.new,action-timesheet-method-from-date"
     width="large">
 
-    <menubar>
-      <menu title="Reports">
-        <item action="action" title="Print" />
-      </menu>
-      <menu title="Tools">
-        <item action="action" title="line generation wizards" />
-      </menu>
-    </menubar>
-
-    <panel name="panel-1">
-      <field name="progress" widget="NavSelect" selection="timesheet.progress"
-        readonly="true" showTitle="false" />
-      <button onClick="save,action.timesheet.record.on.confirm"
-        name="confirm" title="confirm" colSpan="2" showIf="progress == 0" />
-
-      <field name="company" readonly="true" />
-      <field name="user" />
-      <field name="fromdate" />
-      <field name="todate" onChange="action-timesheet-condition-check-to-date" />
-    </panel>
-
-    <panel>
-      <field name="image" widget="image" />
-    </panel>
-
-    <panel name="panel-2">
-      <panel-related field="timesheetLineList" grid-view="TimesheetLines-grid"
-        form-view="timesheet-line-form" title="Timesheet Line" 	colSpan="12" />
-<!-- 				onChange="com.axelor.timesheet.service.TimesheetService:computetotalHrs" -->
-
-      <panel-related field="activityList" />
-    </panel>
-
-    <panel name="panel-3" title="Totals on period">
-      <button
-        onClick="save,com.axelor.timesheet.service.TimesheetService:demo(__this__),sync"
-        name="demo-btn" title="Demo" />
-      <field name="totalHrs" title="TotalHours" />
-      <field name="hrs" />
-    </panel>
+	    <menubar>
+		      <menu title="Reports">
+		         <item action="action" title="Print" />
+		      </menu>
+		      <menu title="Tools">
+		         <item action="action" title="line generation wizards" />
+		      </menu>
+	    </menubar>
+	
+	    <panel name="panel-1">
+		      <field name="progress" widget="NavSelect" selection="timesheet.progress"
+		        readonly="true" showTitle="false" />
+		      <button onClick="save,action.timesheet.record.on.confirm"
+		        name="confirm" title="confirm" colSpan="2" showIf="progress == 0" />
+		      <field name="company" readonly="true" />
+		      <field name="user" />
+		      <field name="fromdate" />
+		      <field name="todate" onChange="action-timesheet-condition-check-to-date" />
+		    </panel>
+	
+	    <panel>
+	       <field name="image" widget="image" />
+	    </panel>
+	
+	    <panel name="panel-2">
+		      <panel-related field="timesheetLineList" grid-view="TimesheetLines-grid"
+		        form-view="timesheet-line-form" title="Timesheet Line" 	colSpan="12" />
+		<!-- 				onChange="com.axelor.timesheet.service.TimesheetService:computetotalHrs" -->
+		
+		      <panel-related field="activityList" />
+	    </panel>
+	
+	    <panel name="panel-3" title="Totals on period">
+		      <button
+		        onClick="save,com.axelor.timesheet.service.TimesheetService:demo(__this__),sync"
+		        name="demo-btn" title="Demo" />
+		      <field name="totalHrs" title="TotalHours" />
+		      <field name="hrs" />
+	    </panel>
 
   </form>
 
   <tree name="timesheet-task-tree" title="TREE">
-    <column name="Task" type="string" />
-    <column name="status" type="decimal" />
-    <node model="com.axelor.project.db.Timesheet">
-      <field name="name" as="Task" />
-    </node>
-    <node model="com.axelor.project.db.TimesheetLines" parent="timesheet"
-      draggable="true" onClick="action.project.record.activity">
-      <field name="task" as="Task" />
-      <field name="hours" as="status" />
-    </node>
+	    <column name="Task" type="string" />
+	    <column name="status" type="decimal" />
+	    <node model="com.axelor.project.db.Timesheet">
+	      <field name="name" as="Task" />
+	    </node>
+	    <node model="com.axelor.project.db.TimesheetLines" parent="timesheet"
+	      draggable="true" onClick="action.project.record.activity">
+	      <field name="task" as="Task" />
+	      <field name="hours" as="status" />
+	    </node>
 
   </tree>
+<!--   <action-view name="action.timesheet.view.filter.records" title="filter" model="com.axelor.project.db.Timesheet"> -->
+<!--        <view type="grid" name="timesheet-grid"/>	 -->
+<!-- 		<domain>self.id = :_id </domain> -->
+<!-- 		<context name="_id" expr="eval:_ids"/> -->
+	
+  
+<!--   </action-view> -->
 
   <action-view name="action.project.record.activity" title="Activity"
-    model="com.axelor.project.db.TimesheeLines">
-    <view type="form" name="timesheet-line-form" />
+		    model="com.axelor.project.db.TimesheeLines">
+		    <view type="form" name="timesheet-line-form" />
+		    
   </action-view>
 
   <cards name="timesheet-card" model="com.axelor.project.db.Timesheet"
     title="Timesheet">
 
-    <field name="company" />
-    <field name="user" />
-    <field name="image" />
-    <field name="activityList" />
-    <template>
-    <![CDATA[
-    <div class="span12 card-image">
-       <img ng-src="{{$image(null, 'image')}}">
-       {{user.name}}<br>
-        <strong>{{company}}</strong>
-  </div>
+		    <field name="company" />
+		    <field name="user" />
+		    <field name="image" />
+		    <field name="activityList" />
+			    <template>
+			    <![CDATA[
+			    <div class="span12 card-image">
+			       <img ng-src="{{$image(null, 'image')}}">
+			       {{user.name}}<br>
+			        <strong>{{company}}</strong>
+			  </div>
+			
+			    ]]>
+			    </template>
+    </cards>
 
-    ]]>
-    </template>
-  </cards>
 
 
   <!-- <action-method name="action-timesheet-method-test-btn-on-click"> -->

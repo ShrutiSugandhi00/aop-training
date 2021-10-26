@@ -1,5 +1,7 @@
 package com.axelor.timesheet.web;
 
+import java.util.List;
+
 import com.axelor.inject.Beans;
 import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.meta.schema.actions.ActionView.ActionViewBuilder;
@@ -9,6 +11,8 @@ import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.timesheet.service.TimesheetService;
 import com.google.inject.Inject;
+
+
 
 public class TimesheetController {
   @Inject TimesheetService timesheetService;
@@ -34,40 +38,56 @@ public class TimesheetController {
   //		// response.setNotify("enter working hours..");
   //	}
 
-  // to fetch record from db
 
+  
+  
+  
+        //returns fromdate onNew 
   public void fromDate(ActionRequest request, ActionResponse response) {
-
-    // System.err.println("first....." );
-
-    Timesheet timeSheetFromDb =
-        Beans.get(AbstractTimesheetRepository.class).all().order("-todate").fetchOne();
-    // System.err.println("second..");
-    response.setValue("fromdate", timeSheetFromDb.getTodate());
+	  			// System.err.println("first....." );
+	    System.err.println(request.getContext().entrySet());
+	    Timesheet timeSheetFromDb =
+             Beans.get(AbstractTimesheetRepository.class).all().order("-todate").fetchOne();
+	    		// System.err.println("second..");
+	  	if(timeSheetFromDb != null) {
+	  	   	response.setValue("fromdate", timeSheetFromDb.getTodate());
+    }
   }
-  // or
-  // public void date(ActionRequest request, ActionResponse response) {
-  // Timesheet timesheet = request.getContext().asType(Timesheet.class);
-  // System.err.println(timesheet);
-  // timesheet = timesheetService.fromDate(timesheet);
-  // response.setValue("fromdate", timesheet.getFromdate());
-  // }
+			  // or
+			  // public void date(ActionRequest request, ActionResponse response) {
+			  // Timesheet timesheet = request.getContext().asType(Timesheet.class);
+			  // System.err.println(timesheet);
+			  // timesheet = timesheetService.fromDate(timesheet);
+			  // response.setValue("fromdate", timesheet.getFromdate());
+			  // }
 
+  
+  			//provides a new form on click
   public void add(ActionRequest request, ActionResponse response) {
-    Timesheet tm = request.getContext().asType(Timesheet.class);
-    tm = Beans.get(AbstractTimesheetRepository.class).find(tm.getId());
-    // ActionViewBuilder avb =
-    // ActionView.define("Timesheet").model(Timesheet.class.getName()).add("grid",
-    // "timesheet-grid");
-    ActionViewBuilder avb =
-        ActionView.define("Timesheet")
-            .model(Timesheet.class.getName())
-            .add("form", "timesheet-form");
-    response.setView(avb.map());
+              Timesheet tm = request.getContext().asType(Timesheet.class);
+              tm = Beans.get(AbstractTimesheetRepository.class).find(tm.getId());
+              // ActionViewBuilder avb =
+		      // ActionView.define("Timesheet").model(Timesheet.class.getName()).add("grid",
+		      // "timesheet-grid");
+		       ActionViewBuilder avb =
+		    		 ActionView.define("Timesheet")
+		            .model(Timesheet.class.getName())
+		            .add("form", "timesheet-form");
+		       response.setView(avb.map());
   }
 
   public void sample(ActionRequest request, ActionResponse response) {
-
-    System.err.println("calling controller");
+     System.err.println("calling controller");
+     List<Long> ids=(List<Long>) request.getContext().get("_ids");
+     System.out.println(ids);
+     ActionViewBuilder avb=ActionView.define("Timesheet")
+    		 .model(Timesheet.class.getName())
+    		 .add("grid","timesheet-grid")
+    		 .add("form", "timesheet-form")
+    		 .domain("self.id in :ids")
+    		 .context("ids", ids);
+     
+     response.setView(avb.map());
+     
   }
 }

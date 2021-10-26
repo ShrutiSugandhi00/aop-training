@@ -1,72 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
+  xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.4.xsd">
 
 
-	<chart name="chart.project.timesheet" title="Timesheet Bar">
-		<search-fields>
-			<field name="fdate" title="FROM DATE" type="date" />
-			<field name="tdate" title="TO DATE" type="date" />
-		</search-fields>
-		<dataset type="jpql">
-			<![CDATA[
-			SELECT
-			    MONTH(t.todate)AS month,
-			    COUNT(tl.timesheet) AS lines
-			FROM
-			    Timesheet t 
-			LEFT JOIN
-				TimesheetLines tl ON t.id=tl.timesheet
-			WHERE
-			   	t.fromdate=:fdate AND t.todate=:tdate
-			GROUP BY
-				t.todate
-			]]>
-		</dataset>
-		<category key="month" type="month" title="x-axis" />
-		<series key="lines" groupBy="lines" type="bar" title="y-axis" />
-	</chart>
+  <chart name="chart.project.timesheet" title="Timesheet Bar" >
+    <search-fields>
+      <field name="fdate" title="FROM DATE" type="date" />
+      <field name="tdate" title="TO DATE" type="date" />
+    </search-fields>
+    <dataset type="jpql">
+      <![CDATA[
+      SELECT
+          MONTH(tl.dates)AS month,
+          COUNT(tl.timesheet) AS lines
+      FROM
+          Timesheet t
+      LEFT JOIN
+        TimesheetLines tl ON t.id=tl.timesheet
+      WHERE
+           tl.dates BETWEEN :fdate AND :tdate
+      GROUP BY
+        tl.dates
+      ]]>
+    </dataset>
+    <category key="month" type="month" title="x-axis" />
+    <series key="lines" groupBy="lines" type="bar" title="y-axis" />
+  </chart>
 
-	<chart name="chart.project.timesheet.sql" title="Timesheet Sql Bar">
-		<search-fields>
-			<field name="fdate" title="FROM DATE" type="date" />
-			<field name="tdate" title="TO DATE" type="date" />
-		</search-fields>
-		<dataset type="sql">
-			<![CDATA[
-			SELECT
-			 	EXTRACT(month from t.todate)AS month,
-			 	COUNT(tl.id) AS lines
-			FROM
-			    project_timesheet t 
-			LEFT JOIN
-				project_timesheet_lines tl ON t.id=tl.timesheet
-			WHERE
-			   	t.fromdate= DATE(:fdate) AND t.todate =DATE(:tdate)
-			GROUP BY
-				 t.todate
-			]]>
-		</dataset>
-		<category key="month" type="month" title="x-axis" />
-		<series key="lines" groupBy="lines" type="bar" title="y-axis" />
-	</chart>
+  <chart name="chart.project.timesheet.sql" title="Timesheet Sql Bar" onInit="action-chart-record-set-default dates">
+    <search-fields>
+      <field name="fdate" title="FROM DATE" type="datetime" widget="date"/>
+      <field name="tdate" title="TO DATE" type="datetime" widget="date" />
+    </search-fields>
+    <dataset type="sql">
+      <![CDATA[
+      SELECT
+         EXTRACT(month from tl.dates)AS month,
+         COUNT(tl.id) AS lines
+      FROM
+          project_timesheet t
+      LEFT JOIN
+        project_timesheet_lines tl ON t.id=tl.timesheet
+      WHERE
+         :fdate IS NOT NULL and :Tdate is not null and  tl.dates BETWEEN to_date(:fdate,'YYYY-MM-DD') AND to_date(:tdate,'YYYY-MM-DD') 
+      GROUP BY
+         tl.dates
+      ]]>
+    </dataset>
+    <category key="month" type="month" title="x-axis" />
+    <series key="lines" groupBy="lines" type="bar" title="y-axis" />
+  </chart>
 
-	<dashboard name="Charts.sql.dashboard" title="Sql chart view">
-		<dashlet action="chart:chart.project.timesheet.sql" />
-		<dashlet action="chart:chart.project.timesheet" />
-	</dashboard>
+  <dashboard name="Charts.sql.dashboard" title="Sql chart view">
+    <dashlet action="chart:chart.project.timesheet.sql" />
+    <dashlet action="chart:chart.project.timesheet" />
+  </dashboard>
 
+<action-attrs name="action-chart-attrs-set-default" >
+  <attribute name="value" for="fdate" expr="eval:__date__"/>
+  <attribute name="value" for="tdate" expr="eval:__date__"/>
+</action-attrs>
 
 
 
 </object-views>
-
-
-
-
-
-
-
-
-
-
